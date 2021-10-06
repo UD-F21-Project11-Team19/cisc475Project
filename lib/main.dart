@@ -93,6 +93,7 @@ class _BackgroundVideoState extends State<BackgroundVideo> {
 }
 
 // A basic login widget with a logo and a form with rounded corners.
+//test
 class LoginWidget extends StatelessWidget {
   const LoginWidget({
     Key key,
