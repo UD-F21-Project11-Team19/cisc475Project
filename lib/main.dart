@@ -31,6 +31,11 @@ class BackgroundVideo extends StatefulWidget {
   _BackgroundVideoState createState() => _BackgroundVideoState();
 }
 
+class AboutUs extends StatefulWidget {
+  @override
+  _BackgroundVideoState createState() => _BackgroundVideoState();
+}
+
 class _BackgroundVideoState extends State<BackgroundVideo> {
   // TODO 4: Create a VideoPlayerController object.
   VideoPlayerController _controller;
@@ -131,16 +136,15 @@ class LoginWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              TextField(
-                cursorColor: Color(0xffb55e28),
-                decoration: InputDecoration(
-                  hintText: 'Username',
-                ),
-              ),
-              TextField(
-                cursorColor: Color(0xffb55e28),
-                decoration: InputDecoration(
-                  hintText: 'Password',
+              ButtonTheme(
+                minWidth: 300.0,
+                child: RaisedButton(
+                  color: Color(0xff00539f),
+                  child: Text(
+                    'Login as Guest',
+                    style: TextStyle(color: Color(0xffffd544), fontSize: 20),
+                  ),
+                  onPressed: () {},
                 ),
               ),
               ButtonTheme(
@@ -148,16 +152,70 @@ class LoginWidget extends StatelessWidget {
                 child: RaisedButton(
                   color: Color(0xff00539f),
                   child: Text(
-                    'Login',
+                    'Login as User',
                     style: TextStyle(color: Color(0xffffd544), fontSize: 20),
                   ),
                   onPressed: () {},
                 ),
               ),
+              TextButton(
+                style: TextButton.styleFrom(
+                  textStyle: const TextStyle(
+                    fontSize: 15,
+                    color: Color(0xff00539f),
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutUs()),
+                  );
+                },
+                child: const Text('About Us'),
+              ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _AboutUs extends State {
+  VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    // Pointing the video controller to our local asset.
+    _controller = VideoPlayerController.asset("assets/Background_Video.mp4")
+      ..initialize().then((_) {
+        // Once the video has been loaded we play the video and set looping to true.
+        _controller.play();
+        _controller.setLooping(true);
+        // Ensure the first frame is shown after the video is initialized.
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('IDS Lab'),
+      ),
+      body: new Container(
+        child: new Text(
+          "Welcome to Professor Andreas Malikopoulos’ Information and Decision Science (IDS) lab! The overarching goal of the IDS Lab is to enhance understanding of large-scale, complex cyber-physical systems (CPS) and establish rigorous theories and algorithms for making CPS able to realize how to improve their performance over time while interacting with their environment. The emphasis is on applications related to emerging mobility systems (e.g., connected and automated vehicles, shared mobility), sociotechnical systems, social media, and smart cities.",
+          style: new TextStyle(
+              fontSize: 12.0,
+              color: const Color(0xFF000000),
+              fontWeight: FontWeight.w200,
+              fontFamily: "Roboto"),
+        ),
+        padding: const EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 179.0),
+        alignment: Alignment.center,
+      ),
     );
   }
 }
