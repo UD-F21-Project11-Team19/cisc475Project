@@ -33,7 +33,7 @@ class BackgroundVideo extends StatefulWidget {
 
 class AboutUs extends StatefulWidget {
   @override
-  _BackgroundVideoState createState() => _BackgroundVideoState();
+  _AboutUs createState() => _AboutUs();
 }
 
 class _BackgroundVideoState extends State<BackgroundVideo> {
