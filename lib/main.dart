@@ -314,7 +314,12 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           tooltip: 'Back',
-          onPressed: () => debugPrint('back'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BackgroundVideo()),
+            );
+          },
         ),
         actions: <Widget>[
           IconButton(
