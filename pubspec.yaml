@@ -49,6 +49,10 @@ flutter:
   # TODO 2: Create an asset folder in your project
   # TODO 3: Added a video to your asset folder and it to your pubspec.yaml file.
   assets:
+    - assets/images/xiaoqiche.png
+    - assets/images/bg.png
+    - assets/images/map.PNG
+    - assets/download.png
     - assets/IDS_logo.png
     - assets/Background_Video.mp4
     - assets/IDS_lab.png
