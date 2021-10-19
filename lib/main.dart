@@ -616,18 +616,6 @@ class SecondRoute extends StatelessWidget {
                   tooltip: 'zoom down'),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 20),
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                  onPressed: () {
-                    print('minus');
-                  },
-                  child: const Icon(Icons.remove),
-                  tooltip: 'zoom down'),
-            ),
-          ),
         ],
       ),
       body: ConstrainedBox(
