@@ -306,21 +306,16 @@ class _MyHomePageState extends State<MyHomePage> {
     tapTimes++;
   }
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        leading: IconButton(
+        /* leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           tooltip: 'Back',
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => BackgroundVideo()),
-            );
-          },
-        ),
+          onPressed: () => debugPrint('back'),
+        ), */
         actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.check, color: Colors.black),
@@ -333,6 +328,11 @@ class _MyHomePageState extends State<MyHomePage> {
               })
         ],
       ),
+      drawer: Drawer(
+          child: ListView(children: const <Widget>[
+        UserAccountsDrawerHeader(
+            accountName: Text('Name'), accountEmail: Text('111'))
+      ])),
       body: SizedBox.expand(
         child: Padding(
           padding: EdgeInsets.only(bottom: _sheetH),
