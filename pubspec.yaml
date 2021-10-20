@@ -56,7 +56,7 @@ flutter:
     - assets/IDS_logo.png
     - assets/Background_Video.mp4
     - assets/IDS_lab.png
-    - assets/images/
+    - assets/images/car.png
     - assets/citymap.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

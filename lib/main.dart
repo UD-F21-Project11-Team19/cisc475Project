@@ -336,8 +336,8 @@ class _MyHomePageState extends State<MyHomePage> {
           title: const Text('Car List'),
           onTap: () {
             // Update the state of the app.
-            Navigator.pop(context);
-            //runApp(const MyHome());
+            //Navigator.pop(context);
+            runApp(const MyHome());
             //Navigator.push(
             //context,
 
@@ -471,11 +471,6 @@ class MyHomePage1 extends StatefulWidget {
 
 class _CarList extends State<MyHomePage1> {
   var activeScreen = carListScreen;
-  @override
-  void initState() {
-    super.initState();
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -510,7 +505,10 @@ class _CarList extends State<MyHomePage1> {
         ListTile(
           title: const Text('Ride'),
           onTap: () {
-            // Update the state of the app.
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => path()),
+            );
           },
         ),
         ListTile(
