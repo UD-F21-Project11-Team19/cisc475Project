@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 
+//CarList class 应该在main里
 class _CarList extends State<MyHomePage> {
   var activeScreen = carListScreen;
 
@@ -58,7 +59,9 @@ class _CarList extends State<MyHomePage> {
 }
 
 
-
+//////////////////////////////////////////////////
+///后面这些code是这个文件夹的原本的文件，在连接之前是可以run的
+///main里面有个import我comment掉了，正常run的时候需要import这个文件
 
 class Screen {
   final String title;
