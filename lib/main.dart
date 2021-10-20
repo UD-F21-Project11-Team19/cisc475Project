@@ -337,12 +337,11 @@ class _MyHomePageState extends State<MyHomePage> {
           onTap: () {
             // Update the state of the app.
             //Navigator.pop(context);
-            runApp(const MyHome());
-            //Navigator.push(
-            //context,
-
-            //MaterialPageRoute(builder: (context) => MyHome()),
-            //);
+            //runApp(const MyHome());
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyHome()),
+            );
           },
         ),
         ListTile(
