@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:video_player/video_player.dart';
 
+//import 'IDS_Car_List.dart';
+
 void main() => runApp(BackgroundVideo());
 
 class MyApp extends StatelessWidget {
@@ -232,15 +234,6 @@ class path extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'IDS LAB'),
@@ -306,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
     tapTimes++;
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -329,9 +322,27 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
       drawer: Drawer(
-          child: ListView(children: const <Widget>[
+          child: ListView(children: [
         UserAccountsDrawerHeader(
-            accountName: Text('Name'), accountEmail: Text('111'))
+            accountName: Text('User Name'), accountEmail: Text('Guest')),
+        ListTile(
+          title: const Text('Ride'),
+          onTap: () {
+            // Update the state of the app.
+            Navigator.pop(context);
+          },
+        ),
+        ListTile(
+          title: const Text('Car List'),
+          onTap: () {
+            // Update the state of the app.
+            Navigator.pop(context);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => CarList()),
+            // );
+          },
+        ),
       ])),
       body: SizedBox.expand(
         child: Padding(
