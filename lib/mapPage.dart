@@ -32,6 +32,7 @@ class _MyHomePageState2 extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(widget.title),
       ),
       body: Container(
@@ -53,7 +54,7 @@ class _MyHomePageState2 extends State<MyHomePage> {
                       width: 10,
                       height: 10,
                       decoration: const BoxDecoration(
-                          color: Colors.blue,
+                          color: Colors.grey,
                           borderRadius: BorderRadius.all(Radius.circular(5))),
                     ),
                     Container(
@@ -159,9 +160,7 @@ class path extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.grey),
       home: MyHomePage(title: 'IDS LAB'),
     );
   }
@@ -229,6 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         title: Text(widget.title),
         /* leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),

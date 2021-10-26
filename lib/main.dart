@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Stateless'),
-          backgroundColor: Colors.black,
+          //backgroundColor: Colors.transparent,
         ),
       ),
     );
@@ -210,14 +210,25 @@ class _AboutUs extends State {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
+        backgroundColor: Colors.white,
         title: new Text('IDS Lab'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          tooltip: 'Back',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => BackgroundVideo()),
+            );
+          },
+        ),
       ),
       body: new Container(
         child: new Text(
           "Welcome to Professor Andreas Malikopoulos’ Information and Decision Science (IDS) lab! The overarching goal of the IDS Lab is to enhance understanding of large-scale, complex cyber-physical systems (CPS) and establish rigorous theories and algorithms for making CPS able to realize how to improve their performance over time while interacting with their environment. The emphasis is on applications related to emerging mobility systems (e.g., connected and automated vehicles, shared mobility), sociotechnical systems, social media, and smart cities.",
           style: new TextStyle(
-              fontSize: 12.0,
-              color: const Color(0xFF000000),
+              fontSize: 18.0,
+              color: Colors.black,
               fontWeight: FontWeight.w200,
               fontFamily: "Roboto"),
         ),

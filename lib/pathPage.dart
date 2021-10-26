@@ -28,14 +28,24 @@ class SecondRoute extends StatelessWidget {
               ],
             ),
             preferredSize: const Size.square(1.0)),
-        backgroundColor: const Color(0xff885566),
+        backgroundColor: Colors.white,
         title: const Center(
           child: Text(
             'LSD LAB',
-            style: TextStyle(color: Color(0xff000000)),
+            style: TextStyle(color: Colors.black),
           ),
         ),
         elevation: 0.0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          tooltip: 'Back',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => path()),
+            );
+          },
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.check, color: Colors.black),
