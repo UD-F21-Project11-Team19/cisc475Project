@@ -28,6 +28,8 @@ dependencies:
   # TODO 1: Added video player dependency
   # Video Player Dependency: https://pub.dev/packages/video_player
   video_player: ^0.10.5+2
+  firebase_core: "^0.7.0"
+  firebase_auth: "^0.20.1"
 
 dev_dependencies:
   flutter_test:
@@ -57,6 +59,9 @@ flutter:
     - assets/Background_Video.mp4
     - assets/IDS_lab.png
     - assets/images/car.png
+    - assets/images/car1.png
+    - assets/images/car2.png
+    - assets/images/car3.png
     - assets/citymap.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
