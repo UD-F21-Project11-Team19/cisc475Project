@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:scale_city/line.dart';
 
 import 'poly.dart';
 import 'utils.dart';
@@ -15,7 +17,9 @@ import 'detailPage.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-// import 'package:poly/poly.dart';
+import 'poly.dart';
+
+import 'clientpage.dart';
 
 class Area {
   String name = '';
@@ -28,7 +32,7 @@ class Area {
 }
 
 class MapPage extends StatefulWidget {
-  MapPage({Key key, this.title}) : super(key: key);
+  const MapPage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -47,13 +51,17 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   // 地图的尺寸比例
-  List data;
-  final double _sheetH = 280.0;
+  final double _sheetH = 230.0;
   final double _mapP = 100.0;
   final double _mapW = 1000.0;
   final double _mapH = 1000.0;
 
-  List<Node> nodeList = [];
+  List<MapNode> mapNodeList = [];
+  List<MapLine> mapLineList = [];
+  List<MapArc> mapArcsList = [];
+
+  List<MapLine> drawLines = [];
+  List<MapArc> drawArcs = [];
 
   // final List<Area> _bigAreas = [
   //   Area(name: "1", x: 158, y: 113, width: 318, height: 81),
@@ -98,15 +106,20 @@ class _MapPageState extends State<MapPage> {
 
   bool isStart = true;
   bool isEnd = false;
-  bool showArea = true;
+  bool showArea = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    print("initstate");
-
-    nodeList = Node.fromNodes(mapWidth: _mapW, mapHeight: _mapH);
-    print("${nodeList.length}");
+    // print("initstate");
+    var mapConvert =
+        MapConvert.fromCsv(mapWidth: _mapW, mapHeight: _mapW, padding: _mapP);
+    mapNodeList = MapNode.fromCsv(mapConvert);
+    mapLineList = MapLine.fromCsv(mapConvert);
+    mapArcsList = MapArc.fromCsv(mapConvert);
+    if (kDebugMode) {
+      print(
+          "mapNodeList length,${mapNodeList.length}, ${mapLineList.length}, ${mapArcsList.length}");
+    }
 
     // int xCount = 8;
     // int yCount = 8;
@@ -169,17 +182,29 @@ class _MapPageState extends State<MapPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    print("dispose");
+    if (kDebugMode) {
+      print("dispose");
+    }
     _startFocusNode.removeListener(_setInput);
     _endFocusNode.removeListener(_setInput);
     super.dispose();
   }
 
   _setInput() {
+    if (kDebugMode) {
+      print("setInput 0:$isStart,$isEnd");
+    }
     setState(() {
+      if (!_startFocusNode.hasFocus && !_endFocusNode.hasFocus) {
+        return;
+      }
       isStart = _startFocusNode.hasFocus;
       isEnd = _endFocusNode.hasFocus;
     });
+
+    if (kDebugMode) {
+      print("setInput 1: $isStart,$isEnd");
+    }
   }
 
   // tap real position
@@ -200,7 +225,7 @@ class _MapPageState extends State<MapPage> {
 
     double _min = 0;
     String _minName;
-    for (var node in nodeList) {
+    for (var node in mapNodeList) {
       var dis = sqrt(pow((node.x - x).abs(), 2) + pow((node.y - y).abs(), 2));
       if (_minName?.isEmpty ?? true) {
         _min = dis;
@@ -209,10 +234,34 @@ class _MapPageState extends State<MapPage> {
       _min = min(_min, dis);
       _minName = _min == dis ? node.name : _minName;
     }
-    print("min distance:${_minName}: $_min,$x, $y");
+    if (_minName != null) {
+      // find line
+      var closedLines = mapLineList
+          .where((e) => e.name.toLowerCase() == (_minName ?? '').toLowerCase())
+          .toList();
+      // find arc line
+      var closedArcs = mapArcsList
+          .where((e) => e.name.toLowerCase() == (_minName ?? '').toLowerCase())
+          .toList();
 
-    String pointer =
-        '${(x * 100 / _mapW).ceil()},${((_mapH - y) * 100 / _mapH).ceil()},area: ${_minName ?? ''}';
+      if (kDebugMode) {
+        print("choose line:${closedLines.length}, ${closedArcs.length}");
+      }
+
+      setState(() {
+        setState(() {
+          drawLines = closedLines;
+          drawArcs = closedArcs;
+        });
+      });
+    }
+    if (kDebugMode) {
+      print("min distance:$_minName: $_min,$x, $y");
+      print("min distance2:$isStart,$isEnd,$isInit");
+    }
+
+    // String pointer = '${(x * 100 / _mapW).ceil()},${((_mapH - y) * 100 / _mapH).ceil()},area: ${_minName ?? ''}';
+    String pointer = '${x.ceil()},${y.ceil()},area: ${_minName ?? ''}';
     if (isStart || isInit) {
       _startTextEditingController.value = TextEditingValue(text: pointer);
       setState(() {
@@ -229,22 +278,10 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Future<String> getData() async {
-    var response = await http.get(
-        Uri.parse("http://10.0.0.197:3000/addData/1/" +
-            (_endTextEditingController.text.substring(12, 15)).toString()),
-        headers: {"Accept": "application/json"});
-    data = json.decode(response.body);
-    print("GetData executed");
-    print(data[1]["title"]);
-    return "Success!";
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         title: Text(widget.title),
         elevation: 0.0,
         actions: <Widget>[
@@ -252,10 +289,12 @@ class _MapPageState extends State<MapPage> {
               icon: const Icon(Icons.check, color: Colors.black),
               tooltip: 'confirm',
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => pathpage()),
+                var route = new MaterialPageRoute(
+                  builder: (BuildContext context) => new ClientPage(
+                      value: _startTextEditingController.text.substring(13) +
+                          _endTextEditingController.text.substring(13)),
                 );
+                Navigator.of(context).push(route);
               })
         ],
       ),
@@ -274,8 +313,8 @@ class _MapPageState extends State<MapPage> {
           title: const Text('Car List'),
           onTap: () {
             // Update the state of the app.
-            //Navigator.pop(context);
-            //runApp(const MyHome());
+            // //Navigator.pop(context);
+            ////runApp(const MyHome());
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => MyHome()),
@@ -286,7 +325,7 @@ class _MapPageState extends State<MapPage> {
           title: const Text('Back to the login page'),
           onTap: () {
             // Update the state of the app.
-            //Navigator.pop(context);
+            // //Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => BackgroundVideo()),
@@ -312,8 +351,10 @@ class _MapPageState extends State<MapPage> {
               child: GestureDetector(
                   onTapUp: (TapUpDetails details) {
                     // RenderBox box = context.findRenderObject();
-                    print(
-                        "onTapUp ${details.globalPosition},  ${details.localPosition}}");
+                    if (kDebugMode) {
+                      print(
+                          "onTapUp ${details.globalPosition},  ${details.localPosition}}");
+                    }
                     _onTap(
                         x: details.localPosition.dx,
                         y: details.localPosition.dy);
@@ -321,15 +362,16 @@ class _MapPageState extends State<MapPage> {
                   child: Stack(
                     children: [
                       Container(
-                          width: _mapW,
-                          height: _mapH,
-                          child: null,
-                          decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage("assets/citymap.png"),
-                                  fit: BoxFit.cover))),
+                        width: _mapW,
+                        height: _mapH,
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                          image: AssetImage("assets/citymap.png"),
+                          fit: BoxFit.cover,
+                        )),
+                      ),
                       if (showArea)
-                        for (var node in nodeList)
+                        for (var node in mapNodeList)
                           Positioned(
                             top: node.y,
                             left: node.x,
@@ -357,6 +399,54 @@ class _MapPageState extends State<MapPage> {
                       //     ),
                       //
                       //   ),
+
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: CustomPaint(
+                          painter: Line(mapArcs: drawArcs, mapLines: drawLines),
+                        ),
+                      ),
+                      // for (var item in drawLines)
+                      //   if (item.nodes.length >=2)
+                      //     Positioned(
+                      //       top: min(item.nodes[0].y,item.nodes[1].y),
+                      //       left: min(item.nodes[0].x,item.nodes[1].x),
+                      //       width:(item.nodes[0].x - item.nodes[1].x).abs(),
+                      //       height: (item.nodes[0].y - item.nodes[1].y).abs(),
+                      //       child: CustomPaint(
+                      //         painter: Line(isFromTopLeft: true, mapLine: item),
+                      //       ),
+                      //     ),
+                      // for (var item in drawArcs)
+                      //   if (item.nodes.length >=2)
+                      //     Positioned(
+                      //       top: min(item.nodes[0].y,item.nodes[1].y),
+                      //       left: min(item.nodes[0].x,item.nodes[1].x),
+                      //       width:(item.nodes[0].x - item.nodes[1].x).abs(),
+                      //       height: (item.nodes[0].y - item.nodes[1].y).abs(),
+                      //       child: CustomPaint(
+                      //         painter: Line(isFromTopLeft: true, mapArc: item),
+                      //       ),
+                      //     ),
+
+                      // Positioned(
+                      //   top: min(startTapY, endTapY) + 25,
+                      //   left: min(startTapX,endTapX),
+                      //   width:(startTapX - endTapX).abs(),
+                      //   height: (startTapY - endTapY).abs(),
+                      //   child: CustomPaint(
+                      //     painter: Line(isFromTopLeft:(startTapY < endTapY && startTapX < endTapX) || (startTapY > endTapY && startTapX > endTapX)),
+                      //     // child: Center(
+                      //     //   child: Text(
+                      //     //     "Blade Runner",
+                      //     //     style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
+                      //     //   ),
+                      //     // ),
+                      //   ),
+                      // ),
                       Positioned(
                         top: startTapY - 25,
                         left: startTapX - 25,
@@ -374,7 +464,7 @@ class _MapPageState extends State<MapPage> {
                           width: 50,
                           height: 50,
                         ),
-                      )
+                      ),
                     ],
                   )),
             ),
@@ -408,7 +498,17 @@ class _MapPageState extends State<MapPage> {
                   controller: _endTextEditingController,
                 ),
               ),
-              RaisedButton(child: new Text("Submit"), onPressed: getData),
+              // RaisedButton(
+              //     child: new Text("Submit"),
+              //     onPressed: () {
+              //       var route = new MaterialPageRoute(
+              //         builder: (BuildContext context) => new ClientPage(
+              //             value:
+              //                 _startTextEditingController.text.substring(11) +
+              //                     _endTextEditingController.text.substring(11)),
+              //       );
+              //       Navigator.of(context).push(route);
+              //     }),
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: Row(
@@ -437,154 +537,6 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
         decoration: const BoxDecoration(color: Colors.black12),
-      ),
-    );
-  }
-}
-
-class _MyHomePageState2 extends State<MapPage> {
-  final TextEditingController _startTextEditingController =
-      TextEditingController();
-  final TextEditingController _endTextEditingController =
-      TextEditingController();
-  Map<String, List<String>> data = {
-    "a&b": ["zld", "lxt"],
-    "c&d": ["why"],
-    "e&f": ["wx"],
-  };
-  List<String> resultData = [];
-
-  @override
-  void initState() {
-    _startTextEditingController.addListener(() {
-      setState(() {});
-    });
-    _endTextEditingController.addListener(() {
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: ListView(
-          children: [
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              children: [
-                const SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                    ),
-                    Container(
-                      width: 2,
-                      height: 60,
-                      color: Colors.black45,
-                    ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                      decoration: const BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
-                    ),
-                  ],
-                ),
-                Expanded(
-                    child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                            hintText: "Please enter a starting point",
-                            border: OutlineInputBorder()),
-                        controller: _startTextEditingController,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: TextField(
-                        decoration: const InputDecoration(
-                          hintText: "Please input the end",
-                          border: OutlineInputBorder(),
-                        ),
-                        controller: _endTextEditingController,
-                      ),
-                    ),
-                  ],
-                )),
-              ],
-            ),
-            (_startTextEditingController.value.text != '') &&
-                    ((_endTextEditingController.value.text) != '')
-                ? Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      child: GestureDetector(
-                        child: Image.asset(
-                          'assets/map_pin.png',
-                          width: 50,
-                          height: 50,
-                        ),
-                        onTap: () {
-                          String search =
-                              '${_startTextEditingController.value.text}&${_endTextEditingController.value.text}';
-                          if (data.containsKey(search)) {
-                            setState(() {
-                              resultData.clear();
-                              resultData.addAll(data[search] as List<String>);
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  )
-                : const SizedBox(
-                    height: 0,
-                  ),
-            Column(
-              children: resultData
-                  .map((e) => Card(
-                        child: Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(horizontal: 15),
-                          height: 50,
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text(e),
-                          ),
-                        ),
-                      ))
-                  .toList(),
-            )
-          ],
-        ),
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/bg.png"), fit: BoxFit.cover)),
       ),
     );
   }

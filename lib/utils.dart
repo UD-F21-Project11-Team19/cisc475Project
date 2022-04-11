@@ -1,194 +1,191 @@
 import 'dart:math';
-import 'package:meta/meta.dart';
 
-const nodes = '''
-,x_start,y_start,index,id
-0,1.86,-4.3,A1,0
-1,-0.07,-3.99,A2,1
-2,-0.23,-4.3,A3,2
-3,-2.11,-3.99,A4,3
-4,-2.26,-4.3,A5,4
-5,-2.87,-3.68,A6,5
-6,-2.26,-4.14,A7,6
-8,-1.96,-3.99,A9,7
-10,0.23,-4.14,A11,8
-11,2.31,-3.61,A12,9
-12,2.16,-3.46,A13,10
-13,2.31,-3.15,A14,11
-14,1.4,-2.92,A15,12
-15,0.18,-3.31,A16,13
-16,0.08,-3.61,A17,14
-18,-0.23,-3.46,A19,15
-19,-1.8,-3.3,A20,16
-20,-1.95,-3.61,A21,17
-21,-2.11,-3.16,A22,18
-24,-0.07,-3.14,A25,19
-27,1.77,-2.54,A28,20
-28,2.16,-2.08,A29,21
-29,2.23,-2.27,A30,22
-30,2.47,-2.61,A31,23
-31,2.57,-2.27,A32,24
-33,-1.06,-2.77,A34,25
-34,-1.66,-2.32,A35,26
-35,-1.81,-2.16,A36,27
-36,-1.95,-2.46,A37,28
-38,-2.26,-2.31,A39,29
-39,-2.72,-2.78,A40,30
-40,-2.26,-2.16,A41,31
-42,-2.11,-2.01,A43,32
-45,2.47,-1.61,A46,33
-46,2.62,-1.61,A47,34
-47,2.01,-1.45,A48,35
-48,2.01,-1.3,A49,36
-51,2.31,-0.85,A52,37
-52,2.16,-0.85,A53,38
-53,0.38,-0.99,A54,39
-54,0.38,-1.15,A55,40
-55,0.08,-1.61,A56,41
-56,0.23,-1.61,A57,42
-59,-0.07,-0.84,A60,43
-60,-0.23,-0.84,A61,44
-63,-0.38,-1.3,A64,45
-64,-0.37,-1.45,A65,46
-69,-1.19,-1.4,A70,47
-70,-1.53,-1.3,A71,48
-71,-1.95,-1.45,A72,49
-72,-1.81,-1.15,A73,50
-73,-2.11,-0.99,A74,51
-75,-1.19,-1.06,A76,52
-76,-1.02,-0.99,A77,53
-77,1.17,-0.99,A78,54
-78,2.62,-0.21,A79,55
-79,2.47,-0.2,A80,56
-80,2.76,0.29,A81,57
-81,2.63,0.37,A82,58
-82,2.06,0.19,A83,59
-84,2.0,0.05,A86,60
-85,1.66,0.4,A87,61
-86,1.8,0.48,A88,62
-87,2.24,1.22,A89,63
-88,2.24,1.07,A90,64
-89,1.12,0.76,A91,65
-90,1.22,0.91,A92,66
-91,0.71,0.3,A93,67
-92,0.23,0.3,A94,68
-93,0.08,0.3,A95,69
-94,-0.64,0.91,A96,70
-95,-0.66,0.76,A97,71
-96,-1.58,0.28,A98,72
-97,-1.43,0.27,A99,73
-98,-1.67,-0.15,A100,74
-99,-2.39,-0.15,A101,75
-100,-1.95,-0.69,A102,76
-102,-2.17,0.79,A104,77
-103,-2.26,0.91,A105,78
-104,-0.87,1.22,A106,79
-105,-0.87,1.06,A107,80
-107,-1.47,0.58,A1082,81
-108,-1.8,0.92,A1083,82
-110,2.47,-3.69,A110,83
-112,-0.91,-3.3,A112,84
-113,-1.22,-3.15,A113,85
-114,0.18,-2.27,A114,86
-115,0.08,-2.61,A115,87
-116,-0.16,-2.27,A116,88
-117,-0.23,-2.08,A117,89
-121,2.17,-0.0,A121,90
-123,0.23,-4.3,S1,91
-124,1.86,-4.15,S2,92
-127,-1.8,-4.3,S5,93
-128,-0.23,-4.14,S6,94
-130,-1.8,-4.14,S8,95
-131,-2.11,-3.61,S9,96
-135,-1.8,-3.45,S13,97
-136,-0.23,-3.31,S141,98
-138,-1.37,-3.3,S143,99
-139,-0.07,-3.61,S15,100
-140,0.08,-3.99,S16,101
-145,0.23,-3.46,S21,102
-146,0.94,-3.31,S22 ,103
-147,2.16,-3.3,S23,104
-150,2.47,-3.15,S28,105
-151,2.31,-2.6,S29,106
-152,0.08,-3.15,S30,107
-153,-0.07,-2.6,S31,108
-154,-1.06,-3.15,S32,109
-155,-1.21,-2.77,S33,110
-156,-1.95,-3.15,S34,111
-157,-2.11,-2.47,S35,112
-158,-2.72,-3.69,S36,113
-159,-2.87,-2.77,S37,114
-164,-1.8,-2.32,S42,115
-165,-1.67,-2.16,S43,116
-166,-2.11,-1.45,S44,117
-167,-1.95,-2.01,S45,118
-168,-0.23,-1.6,S46,119
-169,-0.07,-1.6,S47,120
-170,0.23,-2.09,S48,121
-172,2.16,-1.6,S50,122
-173,2.31,-1.6,S51,123
-174,2.61,-2.09,S52,124
-180,0.38,-1.3,S58,125
-181,0.38,-1.45,S59,126
-182,2.01,-1.14,S60,127
-183,2.01,-0.99,S611,128
-192,-1.01,-1.45,S69,129
-195,-0.38,-1.15,S72,130
-196,-0.38,-0.99,S73,131
-197,-1.8,-1.29,S74,132
-198,-1.54,-1.15,S75,133
-201,-1.95,-0.99,S78,134
-202,-2.11,-0.69,S79,135
-203,0.23,-0.84,S80,136
-204,0.08,-0.84,S81,137
-205,-0.07,0.31,S82,138
-206,-0.22,0.3,S83,139
-207,0.71,-0.54,S84,140
-208,2.62,-0.84,S85,141
-209,2.47,-0.84,S86,142
-210,2.31,-0.2,S87,143
-211,2.16,-0.21,S88,144
-212,0.71,0.76,S89,145
-213,0.73,0.91,S90,146
-218,-0.87,0.76,S95,147
-219,-0.87,0.91,S96,148
-''';
+import 'data.dart';
 
-class Node {
-  String name = '';
-  double x = 0;
-  double y = 0;
-  double index = 0;
-  Node({this.name, this.x, this.y, this.index});
+class MapConvert {
+  double xMid = 0;
+  double yMid = 0;
+  double step = 0;
+  double xBase = 0;
+  double yBase = 0;
 
-  Node.fromNode(List<String> list, {double mapWidth, double mapHeight}) {
-    name = list[3];
-    double baseX = mapWidth / 10;
-    double baseY = mapHeight / 10;
-    // 整体按照 10 的单位来算
-    double _x = double.parse(list[1]); // 大于0的在左边，小于0的右边
-    x = _x > 0 ? (5 - _x) * baseX : (5 + _x.abs()) * baseX;
-    double _y = double.parse(list[2]); // 小于0的在上面，大于0的在下面
-    y = _y < 0 ? (5 - _y.abs()) * baseY : (5 + _y) * baseY;
-    index = double.parse(list[4]);
-  }
+  MapConvert({this.xMid, this.yMid, this.step, this.xBase, this.yBase});
 
-  static List<Node> fromNodes({double mapWidth, double mapHeight}) {
-    List<Node> nodeList = [];
-    nodes.split('\n').toList().forEach((e) {
+  MapConvert.fromCsv({double mapWidth, double mapHeight, double padding}) {
+    double xMin = 0;
+    double xMax = 0;
+    double yMin = 0;
+    double yMax = 0;
+    dataNodes.split('\n').toList().forEach((e) {
       var list = e.split(',').toList();
       if (list.length >= 4) {
         try {
-          // var num = double.parse(list[1]);
-          // nodeList.add(Node(name:list[3],x: double.parse(list[1]),y: double.parse(list[2]), index: double.parse(list[4])));
-          nodeList.add(
-              Node.fromNode(list, mapWidth: mapWidth, mapHeight: mapHeight));
+          double x = double.parse(list[1]);
+          double y = double.parse(list[2]);
+          xMin = min(xMin, x);
+          xMax = max(xMax, x);
+          yMin = min(yMin, y);
+          yMax = max(yMax, y);
         } catch (e) {
           print(e);
         }
       }
     });
+    double xStep = xMin.abs() + xMax.abs();
+    double yStep = yMin.abs() + yMax.abs();
+    xMid = (xMax + xMin) / 2;
+    yMid = (yMax + yMin) / 2;
+    step = max(xStep, yStep).ceil().toDouble();
+    xBase = mapWidth / step;
+    yBase = mapHeight / step;
+    print("nodes, $xMax,$xMin,$xStep, $xMid, $yMax, $yMin, $yStep, $yMid");
+    // MapCover(xMid: xMid,yMid: yMid, step: step,xBase: xBase,yBase: yBase);
+  }
+}
 
+class MapLine {
+  String name = '';
+  double index = 0;
+  List<MapNode> nodes = [];
+
+  MapLine.fromCsvRow(List<String> csvRow, MapConvert mapConvert) {
+    name = csvRow[1];
+    index = double.parse(csvRow[0]);
+    nodes = [
+      MapNode.fromCsvRow(
+          xSt: csvRow[4], ySt: csvRow[5], mapConvert: mapConvert),
+      MapNode.fromCsvRow(xSt: csvRow[6], ySt: csvRow[7], mapConvert: mapConvert)
+    ];
+  }
+
+  static List<MapLine> fromCsv(MapConvert mapConvert) {
+    return MapNode.parseCsv(dataLines, minLen: 13)
+        .map((e) => MapLine.fromCsvRow(e, mapConvert))
+        .toList();
+  }
+}
+
+enum ArcType {
+  /**
+   * 顺时针旋转
+   */
+  cw,
+  /**
+   * 逆时针旋转
+   */
+  ccw
+}
+
+/**
+ * 曲线
+ */
+class MapArc {
+  String name = '';
+  double index = 0;
+
+  /**
+   * 旋转方向
+   */
+  ArcType type = ArcType.cw;
+  List<MapNode> nodes = [];
+  List<MapNode> angles = [];
+
+  MapArc({this.name, this.index, this.nodes, this.angles});
+
+  MapArc.fromCsvRow(List<String> csvRow, MapConvert mapConvert) {
+    name = csvRow[1];
+    index = double.parse(csvRow[0]);
+    type = csvRow[7] == 'CCW' ? ArcType.ccw : ArcType.cw;
+    nodes = [
+      MapNode.fromCsvRow(
+          xSt: csvRow[8], ySt: csvRow[9], mapConvert: mapConvert),
+      MapNode.fromCsvRow(
+          xSt: csvRow[10], ySt: csvRow[11], mapConvert: mapConvert)
+    ];
+    angles = [
+      MapNode.fromCsvRow(
+          xSt: csvRow[5], ySt: csvRow[6], mapConvert: mapConvert),
+    ];
+  }
+
+  static List<MapArc> fromCsv(MapConvert mapConvert) {
+    return MapNode.parseCsv(dataArcs, minLen: 16)
+        .map((e) => MapArc.fromCsvRow(e, mapConvert))
+        .toList();
+  }
+}
+
+class MapNode {
+  String name = '';
+  double x = 0;
+  double y = 0;
+  double index = 0;
+  MapNode({this.name, this.x, this.y, this.index});
+
+  MapNode.fromCsvRow(
+      {this.name = '',
+      String indexSt = "0",
+      String xSt,
+      String ySt,
+      MapConvert mapConvert}) {
+    // name = csvRow[3];
+    // 整体按照 10 的单位来算
+    try {
+      index = double.parse(indexSt);
+      double half = mapConvert.step / 2;
+      double _x = double.parse(xSt); // 大于0的在左边，小于0的右边
+      _x -= mapConvert.xMid;
+      // double _xHalf = (step - xMid ) / 2;
+      // print("x half $_x");
+      x = _x > 0
+          ? (half - _x) * mapConvert.xBase
+          : (half + _x.abs()) * mapConvert.xBase;
+
+      double _y = double.parse(ySt); // 小于0的在上面，大于0的在下面
+      _y -= mapConvert.yMid;
+      // double _yHalf = (step - yMid) / 2;
+      // print("y half $_y");
+      y = _y < 0
+          ? (half - _y.abs()) * mapConvert.yBase
+          : (half + _y) * mapConvert.yBase;
+      // index = double.parse(csvRow[4]);
+
+    } catch (e) {
+      print("error $e");
+    }
+  }
+
+  static List<List<String>> parseCsv(String csvText,
+      {int minLen, bool skipFirst = true}) {
+    List<List<String>> nodeList = [];
+
+    int i = 0;
+    csvText.split('\n').toList().forEach((e) {
+      if (i > 0 || !skipFirst) {
+        var list = e.split(',').toList();
+        // print("nodelist list,${list},${i}");
+        if (list.length >= minLen) {
+          try {
+            nodeList.add(list);
+          } catch (e) {
+            print(e);
+          }
+        }
+      }
+      i++;
+    });
+    print("nodelist length,${nodeList.length}");
     return nodeList;
+  }
+
+  static List<MapNode> fromCsv(MapConvert mapConvert) {
+    return MapNode.parseCsv(dataNodes, minLen: 4)
+        .map((csvRow) => MapNode.fromCsvRow(
+            name: csvRow[3],
+            indexSt: csvRow[4],
+            xSt: csvRow[1],
+            ySt: csvRow[2],
+            mapConvert: mapConvert))
+        .toList();
   }
 }
