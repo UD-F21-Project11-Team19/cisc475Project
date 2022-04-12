@@ -22,6 +22,10 @@ class Line extends CustomPainter {
           Offset(element.nodes[1].x, element.nodes[1].y),
           paint,
         );
+        print("draw line, ${element.nodes[0].x}");
+        print("draw line, ${element.nodes[0].y}");
+        print("draw line, ${element.nodes[1].x}");
+        print("draw line, ${element.nodes[1].y}");
       }
     }
 

@@ -16,12 +16,30 @@ class MyHomePage extends StatefulWidget {
   State<StatefulWidget> createState() => _MyHomePageState();
 }
 
+class OpenPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint();
+    paint.color = Colors.red;
+    paint.strokeWidth = 5;
+    paint.style = PaintingStyle.stroke;
+    canvas.drawLine(
+      Offset(427.49999999999994, 540.0),
+      Offset(155.83333333333334, 540.0),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   // 地图的尺寸比例
-  final double _sheetH = 0;
+  final double _sheetH = 230.0;
   final double _mapP = 100.0;
-  final double _mapW = 702.0;
-  final double _mapH = 676.0;
+  final double _mapW = 1000.0;
+  final double _mapH = 1000.0;
   // final TextEditingController _startTextEditingController =
   //     TextEditingController(text: '');
   // final TextEditingController _endTextEditingController =
@@ -101,15 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               image: AssetImage("assets/citymap.png"),
                               fit: BoxFit.cover))),
                   Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: CustomPaint(
-                      painter: Line(mapArcs: drawArcs, mapLines: drawLines),
-                    ),
-                  ),
-                  Positioned(
                     top: startTapY - 25,
                     left: startTapX - 25,
                     child: Image.asset(
@@ -125,6 +134,15 @@ class _MyHomePageState extends State<MyHomePage> {
                       'assets/map_pin_end.png',
                       width: 50,
                       height: 50,
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: CustomPaint(
+                      painter: OpenPainter(),
                     ),
                   ),
                 ],
