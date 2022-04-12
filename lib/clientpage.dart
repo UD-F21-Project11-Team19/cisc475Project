@@ -95,8 +95,10 @@ class _ClientPageState extends State<ClientPage> {
               tooltip: 'confirm',
               onPressed: () {
                 var route = new MaterialPageRoute(
-                  builder: (BuildContext context) =>
-                      new MyHomePage(value: "S58 A56"),
+                  builder: (BuildContext context) => new MyHomePage(
+                      value: serverLogs.map((String log) {
+                    return log;
+                  }).toList()),
                 );
                 Navigator.of(context).push(route);
               })
@@ -160,6 +162,7 @@ class _ClientPageState extends State<ClientPage> {
                     flex: 1,
                     child: ListView(
                       children: serverLogs.map((String log) {
+                        var path = log;
                         return Padding(
                           padding: EdgeInsets.only(top: 15),
                           child: Text(log), //text back

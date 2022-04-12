@@ -11,7 +11,7 @@ import 'utils.dart';
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.value}) : super(key: key);
 
-  final String value;
+  final List<String> value;
   @override
   State<StatefulWidget> createState() => _MyHomePageState();
 }
@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 87, 85, 85),
-        title: Text("${widget.value}"),
+        title: Text("${widget.value[0].substring(18)}"),
         elevation: 0.0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
