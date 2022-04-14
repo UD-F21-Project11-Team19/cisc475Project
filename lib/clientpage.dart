@@ -23,7 +23,7 @@ class _ClientPageState extends State<ClientPage> {
     super.initState();
 
     client = Client(
-      hostname: "192.168.1.111",
+      hostname: "128.4.112.10",
       port: 54000,
       onData: this.onData,
       onError: this.onError,
@@ -94,8 +94,8 @@ class _ClientPageState extends State<ClientPage> {
                   color: Color.fromARGB(255, 255, 255, 255)),
               tooltip: 'confirm',
               onPressed: () {
-                var route = new MaterialPageRoute(
-                  builder: (BuildContext context) => new MyHomePage(
+                var route = MaterialPageRoute(
+                  builder: (BuildContext context) => MyHomePage(
                       value: serverLogs.map((String log) {
                     return log;
                   }).toList()),

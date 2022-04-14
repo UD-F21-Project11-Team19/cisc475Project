@@ -8,30 +8,38 @@ import 'poly.dart';
 import 'utils.dart';
 
 //**********MAP PAGE***********
+
+List result = ["S58", "S47", "A56", "A55"];
+var mapConvert =
+    MapConvert.fromCsv(mapWidth: 1000.0, mapHeight: 1000.0, padding: 100.0);
+List<MapLine> mapLineList = MapLine.fromCsv(mapConvert);
+List<MapArc> mapArcsList = MapArc.fromCsv(mapConvert);
+List takearc(List res) {
+  List arc = [];
+  for (var element in res) {
+    if (element[0] == 'A') {
+      arc.add(element);
+    }
+  }
+  return arc;
+}
+
+List takeline(List res) {
+  List line = [];
+  for (var element in res) {
+    if (element[0] == 'S') {
+      line.add(element);
+    }
+  }
+  return line;
+}
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.value}) : super(key: key);
 
   final List<String> value;
   @override
   State<StatefulWidget> createState() => _MyHomePageState();
-}
-
-class OpenPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint = Paint();
-    paint.color = Colors.red;
-    paint.strokeWidth = 5;
-    paint.style = PaintingStyle.stroke;
-    canvas.drawLine(
-      Offset(427.49999999999994, 540.0),
-      Offset(155.83333333333334, 540.0),
-      paint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -57,17 +65,43 @@ class _MyHomePageState extends State<MyHomePage> {
   List<MapLine> drawLines = [];
   List<MapArc> drawArcs = [];
 
+  List<MapLine> mapLineList = [];
+  List<MapArc> mapArcsList = [];
   int tapTimes = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    var mapConvert =
+        MapConvert.fromCsv(mapWidth: _mapW, mapHeight: _mapW, padding: _mapP);
+
+    mapLineList = MapLine.fromCsv(mapConvert);
+    mapArcsList = MapArc.fromCsv(mapConvert);
+
     _tc.value = Matrix4.identity()
       ..translate(-(_mapW + _mapP * 2) / 4, -(_mapH + _mapP * 2) / 4);
     tapX = _mapW / 2;
     tapY = _mapH / 2;
   }
+
+  // void SeprateList(value) {
+  //   for (var element in value) {
+  //     if (element[0] == "S") {
+  //       for (var index1 in mapLineList) {
+  //         if (element[0] == index1.name) {
+  //           drawLines.add(index1);
+  //         }
+  //       }
+  //     } else {
+  //       for (var index in mapArcsList) {
+  //         if (element[0] == index.name) {
+  //           drawArcs.add(index);
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -153,4 +187,79 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+}
+
+class OpenPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    List L = takeline(result);
+    List A = takearc(result);
+
+    var paint = Paint();
+    paint.color = Colors.red;
+    paint.strokeWidth = 5;
+    paint.style = PaintingStyle.stroke;
+    for (var E in L) {
+      for (var e1 in mapLineList) {
+        if (e1.name == E) {
+          canvas.drawLine(
+            Offset(e1.nodes[0].x, e1.nodes[0].y),
+            Offset(e1.nodes[1].x, e1.nodes[1].y),
+            paint,
+          );
+        }
+      }
+    }
+
+    // canvas.drawLine(
+    //   Offset(477.49999999999994, 489.99999999999994),
+    //   Offset(477.49999999999994, 323.3333333333333),
+    //   paint,
+    // );
+    var paint1 = Paint();
+    paint1.color = Colors.blue;
+    paint1.style = PaintingStyle.stroke;
+    // paint
+    paint1.strokeWidth = 5;
+    paint1.strokeCap = StrokeCap.round;
+    for (var E in A) {
+      for (var e1 in mapArcsList) {
+        if (e1.name == E) {
+          var startPoint = Offset(e1.nodes[0].x, e1.nodes[0].y);
+          double cpx = 0;
+          double cpy = 0;
+          if (e1.type == ArcType.cw) {
+            // 顺时针
+            cpx = e1.nodes[0].x;
+            cpy = e1.nodes[1].y;
+          } else {
+            cpx = e1.nodes[1].x;
+            cpy = e1.nodes[0].y;
+          }
+          // var controlPoint1 = Offset(size.width / 2, size.height / 2);
+          var controlPoint1 = Offset(cpx, cpy);
+          // var controlPoint2 = Offset(3 * size.width / 4, size.height / 3);
+          var endPoint = Offset(e1.nodes[1].x, e1.nodes[1].y);
+
+          var path = Path()
+            ..moveTo(startPoint.dx, startPoint.dy)
+            ..quadraticBezierTo(
+                controlPoint1.dx,
+                controlPoint1.dy,
+                // controlPoint1.dx, controlPoint1.dy,
+                endPoint.dx,
+                endPoint.dy)
+            ..lineTo(endPoint.dx, endPoint.dy);
+
+          // canvas.drawArc(Rect.fromPoints(startPoint, endPoint), 0, 45, false, paint);
+          // path.close();
+          // canvas.drawArc(rect, startAngle, sweepAngle, useCenter, paint)
+          canvas.drawPath(path, paint);
+        }
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }

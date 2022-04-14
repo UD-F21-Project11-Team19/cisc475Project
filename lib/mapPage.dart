@@ -289,8 +289,8 @@ class _MapPageState extends State<MapPage> {
               icon: const Icon(Icons.check, color: Colors.black),
               tooltip: 'confirm',
               onPressed: () {
-                var route = new MaterialPageRoute(
-                  builder: (BuildContext context) => new ClientPage(
+                var route = MaterialPageRoute(
+                  builder: (BuildContext context) => ClientPage(
                       value: _startTextEditingController.text.substring(13) +
                           _endTextEditingController.text.substring(13)),
                 );
