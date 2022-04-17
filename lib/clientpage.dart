@@ -23,7 +23,7 @@ class _ClientPageState extends State<ClientPage> {
     super.initState();
 
     client = Client(
-      hostname: "128.4.112.10",
+      hostname: "192.168.1.111",
       port: 54000,
       onData: this.onData,
       onError: this.onError,
@@ -93,14 +93,17 @@ class _ClientPageState extends State<ClientPage> {
               icon: const Icon(Icons.check,
                   color: Color.fromARGB(255, 255, 255, 255)),
               tooltip: 'confirm',
-              onPressed: () {
-                var route = MaterialPageRoute(
-                  builder: (BuildContext context) => MyHomePage(
-                      value: serverLogs.map((String log) {
-                    return log;
-                  }).toList()),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyHomePage(
+                            value: serverLogs.map((String log) {
+                              return log;
+                            }).toList(),
+                          )),
                 );
-                Navigator.of(context).push(route);
+                await client.disconnect();
               })
         ],
       ),
