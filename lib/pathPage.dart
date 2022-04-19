@@ -10,6 +10,7 @@ import 'utils.dart';
 //**********MAP PAGE***********
 
 List result = ["S58", "S47", "A56", "A55"];
+
 var mapConvert =
     MapConvert.fromCsv(mapWidth: 1000.0, mapHeight: 1000.0, padding: 100.0);
 List<MapLine> mapLineList = MapLine.fromCsv(mapConvert);
@@ -105,6 +106,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    String abc = Text("${widget.value[0]}").data;
+    void print1(abc) {
+      print("111111111111111111111111111111111");
+      print(abc);
+    }
+
+    print1(abc);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 87, 85, 85),
@@ -176,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     right: 0,
                     bottom: 0,
                     child: CustomPaint(
-                      painter: OpenPainter(),
+                      painter: OpenPainter(result1: abc),
                     ),
                   ),
                 ],
@@ -190,10 +198,15 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class OpenPainter extends CustomPainter {
+  String result1;
+  OpenPainter({this.result1});
+
   @override
   void paint(Canvas canvas, Size size) {
     List L = takeline(result);
     List A = takearc(result);
+    print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+    print(result1);
 
     var paint = Paint();
     paint.color = Colors.red;
