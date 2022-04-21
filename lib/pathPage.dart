@@ -9,7 +9,7 @@ import 'utils.dart';
 
 //**********MAP PAGE***********
 
-List result = ["S58", "S47", "A56", "A55"];
+//List result = ["S58", "S47", "A56", "A55"];
 
 var mapConvert =
     MapConvert.fromCsv(mapWidth: 1000.0, mapHeight: 1000.0, padding: 100.0);
@@ -106,13 +106,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String abc = Text("${widget.value[0]}").data;
-    void print1(abc) {
-      print("111111111111111111111111111111111");
-      print(abc);
-    }
+    String abc = ("${widget.value}");
+    // void print1(String abc) {
+    //   print("111111111111111111111111111111111");
+    //   print(abc.substring(2, 6));
+    // }
 
-    print1(abc);
+    // print1(abc);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 87, 85, 85),
@@ -203,10 +203,16 @@ class OpenPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    List L = takeline(result);
-    List A = takearc(result);
+    String path = result1.substring(21, 36);
+    List listresult = path.split(',');
+    for (var i = 0; i < 4; i++) {
+      print("this is the list of the result!!!!!");
+      print(listresult[i]);
+    }
+    List L = takeline(listresult);
+    List A = takearc(listresult);
     print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-    print(result1);
+    print(result1.substring(21, 36));
 
     var paint = Paint();
     paint.color = Colors.red;
