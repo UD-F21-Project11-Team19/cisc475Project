@@ -23,7 +23,7 @@ class _ClientPageState extends State<ClientPage> {
     super.initState();
 
     client = Client(
-      hostname: "192.168.1.111",
+      hostname: "128.4.86.205",
       port: 54000,
       onData: this.onData,
       onError: this.onError,

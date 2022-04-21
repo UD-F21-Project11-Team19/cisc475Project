@@ -203,7 +203,18 @@ class OpenPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    String path = result1.substring(21, 36);
+    int start;
+    int end;
+    // List path1 = result1.split('-');
+
+    for (var j = 0; j < result1.length; j++) {
+      if (result1[j] == '-') {
+        start = j + 2;
+        end = result1.length - 2;
+      }
+    }
+
+    String path = result1.substring(start, end);
     List listresult = path.split(',');
     for (var i = 0; i < 4; i++) {
       print("this is the list of the result!!!!!");
@@ -213,6 +224,10 @@ class OpenPainter extends CustomPainter {
     List A = takearc(listresult);
     print("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
     print(result1.substring(21, 36));
+    // print(path1[0]);
+    // print(path1[1]);
+    print(start);
+    print(end);
 
     var paint = Paint();
     paint.color = Colors.red;

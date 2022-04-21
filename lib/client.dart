@@ -36,7 +36,7 @@ class Client {
 
   write(String message) {
     //Connect standard in to the socket
-    socket.write(message + '\n');
+    socket.write(message + '-');
   }
 
   disconnect() {
