@@ -280,6 +280,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    int indexstart;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -289,10 +290,20 @@ class _MapPageState extends State<MapPage> {
               icon: const Icon(Icons.check, color: Colors.black),
               tooltip: 'confirm',
               onPressed: () {
+                for (int i = 0;
+                    i < _startTextEditingController.text.length;
+                    i++) {
+                  if (_startTextEditingController.text[i] == ':') {
+                    indexstart = i + 1;
+                    print("555555555555555555555555555555555");
+                    print(i);
+                  }
+                }
                 var route = MaterialPageRoute(
                   builder: (BuildContext context) => ClientPage(
-                      value: _startTextEditingController.text.substring(13) +
-                          _endTextEditingController.text.substring(13)),
+                      value: _startTextEditingController.text
+                              .substring(indexstart) +
+                          _endTextEditingController.text.substring(indexstart)),
                 );
                 Navigator.of(context).push(route);
               })
