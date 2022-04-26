@@ -208,7 +208,7 @@ class OpenPainter extends CustomPainter {
     // List path1 = result1.split('-');
 
     for (var j = 0; j < result1.length; j++) {
-      if (result1[j] == '-') {
+      if (result1[j] == '\n') {
         start = j + 2;
         end = result1.length - 2;
       }

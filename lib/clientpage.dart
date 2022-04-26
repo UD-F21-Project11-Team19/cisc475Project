@@ -23,7 +23,7 @@ class _ClientPageState extends State<ClientPage> {
     super.initState();
 
     client = Client(
-      hostname: "192.168.1.111",
+      hostname: "192.168.1.245",
       port: 54000,
       onData: this.onData,
       onError: this.onError,
@@ -142,20 +142,21 @@ class _ClientPageState extends State<ClientPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  RaisedButton(
-                    child: Text(!client.connected
-                        ? 'Connect - client'
-                        : 'Disconnect - client'),
-                    onPressed: () async {
-                      if (client.connected) {
-                        await client.disconnect();
-                        this.serverLogs.clear();
-                      } else {
-                        await client.connect();
-                      }
-                      setState(() {});
-                    },
-                  ),
+                  // RaisedButton(
+                  //   child: Text(!client.connected
+                  //       ? 'Connect - client'
+                  //       : 'Disconnect - client'),
+                  //   onPressed: () async {
+                  //     if (client.connected) {
+                  //       await client.disconnect();
+                  //       this.serverLogs.clear();
+
+                  //     } else {
+                  //       await client.connect();
+                  //     }
+                  //     setState(() {});
+                  //   },
+                  // ),
                   Divider(
                     height: 30,
                     thickness: 1,
@@ -207,7 +208,9 @@ class _ClientPageState extends State<ClientPage> {
                   width: 15,
                 ),
                 MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await client.connect();
+                    setState(() {});
                     controller.text = ("${widget.value}"); //get data
                   },
                   minWidth: 30,
@@ -220,6 +223,8 @@ class _ClientPageState extends State<ClientPage> {
                 MaterialButton(
                   onPressed: () {
                     client.write(controller.text);
+                    //await client.disconnect();
+                    setState(() {});
                     controller.text = "";
                   },
                   minWidth: 30,
