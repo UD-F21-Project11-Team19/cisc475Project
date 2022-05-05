@@ -15,7 +15,7 @@ var mapConvert =
     MapConvert.fromCsv(mapWidth: 1000.0, mapHeight: 1000.0, padding: 100.0);
 List<MapLine> mapLineList = MapLine.fromCsv(mapConvert);
 List<MapArc> mapArcsList = MapArc.fromCsv(mapConvert);
-List takearc(List res) {
+List takearc(List res) {//extract all the arc index from the given information, it consumes a string List
   List arc = [];
   for (var element in res) {
     if (element[0] == 'A') {
@@ -25,7 +25,8 @@ List takearc(List res) {
   return arc;
 }
 
-List takeline(List res) {
+List takeline(List res) {//extract all the line index from the given information, it consumes a string List
+  List arc = [];
   List line = [];
   for (var element in res) {
     if (element[0] == 'S') {
@@ -44,24 +45,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // 地图的尺寸比例
   final double _sheetH = 230.0;
   final double _mapP = 100.0;
   final double _mapW = 1000.0;
   final double _mapH = 1000.0;
-  // final TextEditingController _startTextEditingController =
-  //     TextEditingController(text: '');
-  // final TextEditingController _endTextEditingController =
-  //     TextEditingController(text: '');
   final TransformationController _tc = TransformationController();
 
   // state
-  double tapX = 0;
-  double tapY = 0;
-  double startTapX = 0;
-  double startTapY = 0;
-  double endTapX = 0;
-  double endTapY = 0;
+  double tapX = 0;//The x-axis coordinate of the position clicked by the user
+  double tapY = 0;//The y-axis coordinate of the position clicked by the user
+  double startTapX = 0;//The x-axis coordinate of the start position
+  double startTapY = 0;//The y-axis coordinate of the start position
+  double endTapX = 0;////The x-axis coordinate of the end position
+  double endTapY = 0;//The y-axis coordinate of the end position
 
   List<MapLine> drawLines = [];
   List<MapArc> drawArcs = [];
