@@ -1,11 +1,9 @@
-import 'dart:math';
+//ClientPage file is that the page shows after the map page. It will create the Client and connect with Server, and send the original indexes, the number of passagers,
+//and estimated time to Server.
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:scale_city/pathPage.dart';
 import 'client.dart';
-
-import 'mapPage.dart';
 
 class ClientPage extends StatefulWidget {
   final String value;
@@ -21,17 +19,19 @@ class _ClientPageState extends State<ClientPage> {
   double _value2 = 0;
   TextEditingController controller = TextEditingController();
 
+//create the new Client with the IP address
   initState() {
     super.initState();
 
     client = Client(
-      hostname: "192.168.1.227",
+      hostname: "192.168.1.227", //change the IP address in here
       port: 54000,
       onData: this.onData,
       onError: this.onError,
     );
   }
 
+//design the message, and it will be "the real time: indexed" in the Cleint Page.
   onData(Uint8List data) {
     DateTime time = DateTime.now();
     serverLogs.add(time.hour.toString() +
@@ -52,6 +52,7 @@ class _ClientPageState extends State<ClientPage> {
     super.dispose();
   }
 
+//return to the prevvious page
   confirmReturn() {
     return showDialog(
       context: context,
@@ -79,6 +80,7 @@ class _ClientPageState extends State<ClientPage> {
     );
   }
 
+//This method is design the Widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +101,7 @@ class _ClientPageState extends State<ClientPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                      //It will goes the next page and shows the result path
                       builder: (context) => MyHomePage(
                             value: serverLogs.map((String log) {
                               return log;
@@ -144,6 +147,7 @@ class _ClientPageState extends State<ClientPage> {
                   SizedBox(
                     height: 15,
                   ),
+                  //Here are the two sliders
                   Slider(
                     min: 0.0,
                     max: 5.0,
@@ -175,21 +179,7 @@ class _ClientPageState extends State<ClientPage> {
                   Text(
                     'Estimated Time: ${_value2.round()}',
                   ),
-                  // RaisedButton(
-                  //   child: Text(!client.connected
-                  //       ? 'Connect - client'
-                  //       : 'Disconnect - client'),
-                  //   onPressed: () async {
-                  //     if (client.connected) {
-                  //       await client.disconnect();
-                  //       this.serverLogs.clear();
 
-                  //     } else {
-                  //       await client.connect();
-                  //     }
-                  //     setState(() {});
-                  //   },
-                  // ),
                   Divider(
                     height: 30,
                     thickness: 1,
@@ -211,6 +201,7 @@ class _ClientPageState extends State<ClientPage> {
               ),
             ),
           ),
+          //Here is the TextField that will send to the Server.
           Container(
             color: Colors.grey,
             height: 80,
@@ -223,7 +214,7 @@ class _ClientPageState extends State<ClientPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Message à envoyer :',
+                        'Message :',
                         style: TextStyle(
                           fontSize: 8,
                         ),
@@ -245,7 +236,7 @@ class _ClientPageState extends State<ClientPage> {
                     await client.connect();
                     setState(() {});
                     controller.text =
-                        ("${widget.value},${_value1.round()},${_value2.round()}"); //get data
+                        ("${widget.value},${_value1.round()},${_value2.round()}"); //the two indexes data from previous page and the two number from the sliders
                   },
                   minWidth: 30,
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
