@@ -116,7 +116,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 87, 85, 85),
-        title: Text("${widget.value[0].substring(18)}"),
+        //  title: Text("${widget.value[0].substring(18)}"),
+        title: Text("Path Result"),
         elevation: 0.0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),

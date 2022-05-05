@@ -17,13 +17,15 @@ class ClientPage extends StatefulWidget {
 class _ClientPageState extends State<ClientPage> {
   Client client;
   List<String> serverLogs = [];
+  double _value1 = 0;
+  double _value2 = 0;
   TextEditingController controller = TextEditingController();
 
   initState() {
     super.initState();
 
     client = Client(
-      hostname: "192.168.1.245",
+      hostname: "192.168.1.227",
       port: 54000,
       onData: this.onData,
       onError: this.onError,
@@ -142,6 +144,37 @@ class _ClientPageState extends State<ClientPage> {
                   SizedBox(
                     height: 15,
                   ),
+                  Slider(
+                    min: 0.0,
+                    max: 5.0,
+                    value: _value1,
+                    divisions: 5,
+                    label: '${_value1.round()}',
+                    onChanged: (value) {
+                      setState(() {
+                        _value1 = value;
+                      });
+                    },
+                  ),
+                  Text(
+                    'Number of Passengers: ${_value1.round()}',
+                  ),
+
+                  Slider(
+                    min: 0.0,
+                    max: 10.0,
+                    value: _value2,
+                    divisions: 10,
+                    label: '${_value2.round()}',
+                    onChanged: (value) {
+                      setState(() {
+                        _value2 = value;
+                      });
+                    },
+                  ),
+                  Text(
+                    'Estimated Time: ${_value2.round()}',
+                  ),
                   // RaisedButton(
                   //   child: Text(!client.connected
                   //       ? 'Connect - client'
@@ -211,7 +244,8 @@ class _ClientPageState extends State<ClientPage> {
                   onPressed: () async {
                     await client.connect();
                     setState(() {});
-                    controller.text = ("${widget.value}"); //get data
+                    controller.text =
+                        ("${widget.value},${_value1.round()},${_value2.round()}"); //get data
                   },
                   minWidth: 30,
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
