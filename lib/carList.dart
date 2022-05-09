@@ -96,8 +96,8 @@ class _CarList extends State<MyHomePage1> {
 }
 
 //////////////////////////////////////////////////
-///后面这些code是这个文件夹的原本的文件，在连接之前是可以run的
-///main里面有个import我comment掉了，正常run的时候需要import这个文件
+///thre code below are the origrnal codes, it can run before the connection
+///there is a import in the main which i commented it, when run it, need to import this file
 
 class Screen {
   final String title;
@@ -105,7 +105,7 @@ class Screen {
 
   Screen({this.title, this.contentBuilder});
 }
-
+//IDS Car List
 final Screen carListScreen = Screen(
     title: 'IDS Car List',
     contentBuilder: (BuildContext content) {
@@ -128,6 +128,7 @@ class _Car extends StatelessWidget {
   //   this.headImageAssetPath, this.title;
   // });
 
+//get car1 image
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -161,6 +162,8 @@ class _Car2 extends StatelessWidget {
   //   this.headImageAssetPath, this.title;
   // });
 
+//get car2 image
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -193,6 +196,8 @@ class _Car3 extends StatelessWidget {
   // _Car({
   //   this.headImageAssetPath, this.title;
   // });
+
+//get car3 image
 
   @override
   Widget build(BuildContext context) {
