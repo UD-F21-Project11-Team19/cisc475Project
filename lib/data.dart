@@ -1,3 +1,4 @@
+//datas
 const dataTest = '''
 ,x_start,y_start,index,id
 0,1.86,-4.3,A1,0
@@ -156,7 +157,7 @@ const dataNodes = '''
 218,-0.87,0.76,S95,147
 219,-0.87,0.91,S96,148
 ''';
-
+//datas for lines in the map
 const dataLines = '''
 i,index,x,y,x_start,y_start,x_end,y_end,length,start_node,end_node,speed_limit,adjusted_length
 123,S1,0.228,-4.296,0.23,-4.3,1.86,-4.3,1.63,91,0,30,0.05433333317438761
@@ -257,7 +258,7 @@ i,index,x,y,x_start,y_start,x_end,y_end,length,start_node,end_node,speed_limit,a
 218,S95,-0.874,0.762,-0.87,0.76,-0.66,0.76,0.21,147,71,30,0.006999999781449636
 219,S96,-0.874,0.913,-0.87,0.91,-0.64,0.91,0.23,148,70,30,0.007666666805744171
 ''';
-
+//datas of arcs in the map
 const dataArcs = '''
 i,index,x,y,radius,angleStart,angleEnd,Rotation,x_start,y_start,x_end,y_end,length,start_node,end_node,speed_limit,adjusted_length
 0,A1,1.858,-3.686,0.61,-1.5708,0.0,CCW,1.86,-4.3,2.47,-3.69,0.958188,0,83,15,0.06387919982274373
