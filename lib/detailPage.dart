@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'carList.dart';
 import 'mapPage.dart';
 
+//page set up
+
 class _MyHomePageState2 extends State<MyHomePage> {
   final TextEditingController _startTextEditingController =
       TextEditingController();
@@ -66,7 +68,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // 地图的尺寸比例
+  // The scale of the map's dimensions
   final double _sheetH = 0;
   final double _mapP = 100.0;
   final double _mapW = 702.0;
@@ -92,6 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
     tapX = _mapW / 2;
     tapY = _mapH / 2;
   }
+
+//buttons set up--go back and go to the map
 
   @override
   Widget build(BuildContext context) {
