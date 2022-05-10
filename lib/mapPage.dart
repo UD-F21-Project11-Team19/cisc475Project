@@ -50,18 +50,18 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  // 地图的尺寸比例
+  // Scale of map size
   final double _sheetH = 230.0;
   final double _mapP = 100.0;
   final double _mapW = 1000.0;
   final double _mapH = 1000.0;
 
-  List<MapNode> mapNodeList = [];
-  List<MapLine> mapLineList = [];
-  List<MapArc> mapArcsList = [];
+  List<MapNode> mapNodeList = [];//The set to store the map node info
+  List<MapLine> mapLineList = [];//The set to store the map line info
+  List<MapArc> mapArcsList = [];//The set to store the map arc info
 
-  List<MapLine> drawLines = [];
-  List<MapArc> drawArcs = [];
+  List<MapLine> drawLines = [];//The set to store the map line info
+  List<MapArc> drawArcs = [];//The set to store the map arc info
 
   // final List<Area> _bigAreas = [
   //   Area(name: "1", x: 158, y: 113, width: 318, height: 81),
@@ -95,18 +95,20 @@ class _MapPageState extends State<MapPage> {
   final _startFocusNode = FocusNode();
   final _endFocusNode = FocusNode();
 
-  // 地图中区域
-  List<Polygon> polys = []; // 暂时自动生成
+  // Area in map
+  List<Polygon> polys = []; // Temporary automatic generation
 
   // state
-  double startTapX = 0;
-  double startTapY = 0;
-  double endTapX = 0;
-  double endTapY = 0;
+  double startTapX = 0; //the x axis of the position that user tapped
+  double startTapY = 0;//the y axis of the position that user tapped
+  double endTapX = 0;//the x axis of the start position
+  double endTapY = 0;//the x axis of the end position
 
   bool isStart = true;
   bool isEnd = false;
   bool showArea = false;
+  
+  //Initialze the state of page
   @override
   void initState() {
     super.initState();
@@ -170,7 +172,8 @@ class _MapPageState extends State<MapPage> {
     //     polys.add(Polygon(list,name: "x:${i+1},y: ${ii+1}"));
     //   }
     // }
-
+    
+    //The map scale translate
     _tc.value = Matrix4.identity()
       ..translate(-(_mapW + _mapP * 2) / 4, -(_mapH + _mapP * 2) / 4);
     _onTap(x: _mapW / 2, y: _mapH / 2, isInit: true);
@@ -278,6 +281,8 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
+  
+  //Build the current page
   @override
   Widget build(BuildContext context) {
     int indexstart;
@@ -286,7 +291,7 @@ class _MapPageState extends State<MapPage> {
         title: Text(widget.title),
         elevation: 0.0,
         actions: <Widget>[
-          IconButton(
+          IconButton(//Confirm button for going to clientpage and send the info to client page
               icon: const Icon(Icons.check, color: Colors.black),
               tooltip: 'confirm',
               onPressed: () {
@@ -309,7 +314,7 @@ class _MapPageState extends State<MapPage> {
               })
         ],
       ),
-      drawer: Drawer(
+      drawer: Drawer(//The set of buttons that can help user goes into the startpage, car info page.
           child: ListView(children: [
         UserAccountsDrawerHeader(
             accountName: Text('IDS LAB'), accountEmail: Text('Welcome')),
@@ -411,7 +416,7 @@ class _MapPageState extends State<MapPage> {
                       //
                       //   ),
 
-                      Positioned(
+                      Positioned(//Draw the arc or line that user tapped
                         top: 0,
                         left: 0,
                         right: 0,
@@ -458,7 +463,7 @@ class _MapPageState extends State<MapPage> {
                       //     // ),
                       //   ),
                       // ),
-                      Positioned(
+                      Positioned(//show the map pin
                         top: startTapY - 25,
                         left: startTapX - 25,
                         child: Image.asset(
@@ -467,7 +472,7 @@ class _MapPageState extends State<MapPage> {
                           height: 50,
                         ),
                       ),
-                      Positioned(
+                      Positioned(//show the end pin on the map
                         top: endTapY - 25,
                         left: endTapX - 25,
                         child: Image.asset(
@@ -482,7 +487,7 @@ class _MapPageState extends State<MapPage> {
           ),
         ),
       ),
-      bottomSheet: Container(
+      bottomSheet: Container(//for showing the start point and end point position information that used tapped
         width: double.infinity,
         height: _sheetH,
         child: Padding(
@@ -531,9 +536,9 @@ class _MapPageState extends State<MapPage> {
                             showArea = !showArea;
                           });
                         },
-                        child: Text(showArea ? 'hide area' : 'show area')),
+                        child: Text(showArea ? 'hide area' : 'show area')),//button for showing the index on the map?
                     TextButton(
-                        onPressed: () {
+                        onPressed: () {//button for going to detailed page
                           Navigator.push(
                             context,
                             MaterialPageRoute(
