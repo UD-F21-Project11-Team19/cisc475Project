@@ -15,7 +15,10 @@ var mapConvert =
     MapConvert.fromCsv(mapWidth: 1000.0, mapHeight: 1000.0, padding: 100.0);
 List<MapLine> mapLineList = MapLine.fromCsv(mapConvert);
 List<MapArc> mapArcsList = MapArc.fromCsv(mapConvert);
-List takearc(List res) {//extract all the arc index from the given information, it consumes a string List
+
+
+//extract all the arc index from the given information, it consumes a string List
+List takearc(List res) {
   List arc = [];
   for (var element in res) {
     if (element[0] == 'A') {
@@ -25,7 +28,9 @@ List takearc(List res) {//extract all the arc index from the given information, 
   return arc;
 }
 
-List takeline(List res) {//extract all the line index from the given information, it consumes a string List
+
+//extract all the line index from the given information, it consumes a string List
+List takeline(List res) {
   List arc = [];
   List line = [];
   for (var element in res) {
@@ -45,6 +50,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+    //the pad size and map size
   final double _sheetH = 230.0;
   final double _mapP = 100.0;
   final double _mapW = 1000.0;
@@ -59,13 +65,15 @@ class _MyHomePageState extends State<MyHomePage> {
   double endTapX = 0;////The x-axis coordinate of the end position
   double endTapY = 0;//The y-axis coordinate of the end position
 
-  List<MapLine> drawLines = [];
-  List<MapArc> drawArcs = [];
+  List<MapLine> drawLines = [];//the set for storing the line info
+  List<MapArc> drawArcs = [];//the set for storing the arc info
 
-  List<MapLine> mapLineList = [];
-  List<MapArc> mapArcsList = [];
-  int tapTimes = 0;
+  List<MapLine> mapLineList = [];//the set for storing the line info
+  List<MapArc> mapArcsList = [];//the set for storing the arc info
+  int tapTimes = 0;//how many times the user tapped
 
+    
+    //initialze the page
   @override
   void initState() {
     // TODO: implement initState
@@ -100,6 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
   //   }
   // }
 
+    
+    //for build the current pathpage scene
   @override
   Widget build(BuildContext context) {
     String abc = ("${widget.value}");
@@ -115,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
         //  title: Text("${widget.value[0].substring(18)}"),
         title: Text("Path Result"),
         elevation: 0.0,
-        leading: IconButton(
+        leading: IconButton(//go back to mappage button
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           tooltip: 'Back',
           onPressed: () {
@@ -130,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         actions: <Widget>[
-          IconButton(
+          IconButton(//confirm button
               icon: const Icon(Icons.check, color: Colors.black),
               tooltip: 'confirm',
               onPressed: () {})
@@ -157,7 +167,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           image: DecorationImage(
                               image: AssetImage("assets/citymap.png"),
                               fit: BoxFit.cover))),
-                  Positioned(
+                  Positioned(//put the start point pin
                     top: startTapY - 25,
                     left: startTapX - 25,
                     child: Image.asset(
@@ -166,7 +176,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 50,
                     ),
                   ),
-                  Positioned(
+                  Positioned(//put the end point pin
                     top: endTapY - 25,
                     left: endTapX - 25,
                     child: Image.asset(
@@ -194,16 +204,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+//get the information from the Clientpage
 class OpenPainter extends CustomPainter {
   String result1;
   OpenPainter({this.result1});
 
+    //According to the information from the server, draw the arc and line on the map
   @override
   void paint(Canvas canvas, Size size) {
     int start;
     int end;
     // List path1 = result1.split('-');
-
+      //For Line information
     for (var j = 0; j < result1.length; j++) {
       if (result1[j] == '\n') {
         start = j + 2;
@@ -225,7 +237,6 @@ class OpenPainter extends CustomPainter {
     // print(path1[1]);
     print(start);
     print(end);
-
     var paint = Paint();
     paint.color = Colors.red;
     paint.strokeWidth = 5;
@@ -241,7 +252,8 @@ class OpenPainter extends CustomPainter {
         }
       }
     }
-
+      
+      //For drawing the arc 
     // canvas.drawLine(
     //   Offset(477.49999999999994, 489.99999999999994),
     //   Offset(477.49999999999994, 323.3333333333333),
@@ -260,7 +272,7 @@ class OpenPainter extends CustomPainter {
           double cpx = 0;
           double cpy = 0;
           if (e1.type == ArcType.cw) {
-            // 顺时针
+            // Clockwise
             cpx = e1.nodes[0].x;
             cpy = e1.nodes[1].y;
           } else {
